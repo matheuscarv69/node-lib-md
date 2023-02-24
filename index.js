@@ -7,16 +7,12 @@ readFile("./arquivos/texto.md")
 
 function readFile(path) {
 
-  const encoding = "utf8"
+  const encoding = "utf8";
 
-  fs.readFile(path, encoding, (error, text) => {
-
-    if (error) {
-      handleError(error);
-    }
-
-    console.log(chalk.green(text))
-  })
+  fs.promises
+    .readFile(path, encoding)
+    .then((text) => console.log(chalk.green(text)))
+    .catch(handleError(error))
 
 }
 
