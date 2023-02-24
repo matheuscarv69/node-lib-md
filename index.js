@@ -4,20 +4,22 @@ import chalk from 'chalk';
 
 readFile("./arquivos/texto.md")
 
+async function readFile(path) {
+  const encoding = "utf8"
 
-function readFile(path) {
+  try {
 
-  const encoding = "utf8";
+    const result = await fs.promises.readFile(path, encoding)
+    console.log(chalk.green(result));
 
-  fs.promises
-    .readFile(path, encoding)
-    .then((text) => console.log(chalk.green(text)))
-    .catch(handleError(error))
+  } catch (error) {
+    handleError(error)
+  }
 
 }
 
 function handleError(error) {
-
-  throw new Error(chalk.red(error.code, "No suce file or directory"))
+  // console.log(error);
+  throw new Error(chalk.red(error.code, "No such file or directory"))
 
 }
