@@ -2,7 +2,10 @@ import fs from 'fs';
 import chalk from 'chalk';
 
 
-readFile("./arquivos/texto.md")
+const text = await readFile("./arquivos/texto.md")
+console.log("\n");
+
+toExtractLinks(text)
 
 async function readFile(path) {
   const encoding = "utf8"
@@ -10,7 +13,9 @@ async function readFile(path) {
   try {
 
     const result = await fs.promises.readFile(path, encoding)
-    console.log(chalk.green(result));
+    // console.log(chalk.white(result));
+
+    return result;
 
   } catch (error) {
     handleError(error)
@@ -18,8 +23,26 @@ async function readFile(path) {
 
 }
 
+async function toExtractLinks(textSource) {
+  textSource = String(textSource)
+
+  const regex = /\[([^\[\]]*?)\]\((https?:\/\/[^\s?#.].[^\s]*)\)/gm
+
+  // match all return iterators, then I use spread operator to separate each one in a array
+  const filteredTexts = [...textSource.matchAll(regex)]
+
+  const results = filteredTexts.map(filteredText =>
+  (
+    {
+      [filteredText[1]]: filteredText[2]
+    }
+  ))
+
+  console.log(results)
+}
+
 function handleError(error) {
-  // console.log(error);
+
   throw new Error(chalk.red(error.code, "No such file or directory"))
 
 }
