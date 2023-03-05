@@ -42,7 +42,8 @@ async function toExtractLinks(textSource) {
     }
   ))
 
-    return results
+  return results.length != 0 ? results : "Don't find any links in the text"
+  
 }
 
 function handleError(error) {
