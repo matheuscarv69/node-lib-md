@@ -12,6 +12,15 @@ processText(path)
 
 async function processText(path) {
 
+  try {
+    fs.statSync(path)
+  } catch (error) {
+    if (error.code === 'ENOENT') {
+      console.log(chalk.red("No such file or directory"));
+    }
+    return
+  }
+
   if (fs.statSync(path).isFile()) {
 
     const listLinks = await readAndGetLinksOfFile(path)
@@ -26,7 +35,7 @@ async function processText(path) {
     files.forEach(async (fileName) => {
 
       const listLinks = await readAndGetLinksOfFile(`${path}/${fileName}`)
-      printListLinks(listLinks)
+      printListLinks(listLinks, fileName)
 
     })
 
@@ -34,8 +43,12 @@ async function processText(path) {
 
 }
 
-function printListLinks(links) {
+function printListLinks(links, fileName = '') {
 
-  console.log(chalk.yellow("Listing Links: "), links);
+  console.log(
+    chalk.yellow("Listing Links: "),
+    chalk.black.bgGreen(fileName),
+    links
+  )
 
 }
