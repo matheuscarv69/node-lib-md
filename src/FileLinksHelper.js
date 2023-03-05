@@ -6,8 +6,6 @@ async function readAndGetLinksOfFile(filePath) {
 
   const text = await readFile(filePath)
 
-  console.log("\n")
-
   const linksResult = toExtractLinks(text)
 
   return linksResult
@@ -44,7 +42,7 @@ async function toExtractLinks(textSource) {
     }
   ))
 
-  console.log(results)
+    return results
 }
 
 function handleError(error) {
