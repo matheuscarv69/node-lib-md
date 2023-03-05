@@ -2,10 +2,17 @@ import fs from 'fs';
 import chalk from 'chalk';
 
 
-const text = await readFile("./arquivos/texto.md")
-console.log("\n");
+async function readAndGetLinksOfFile(filePath) {
 
-toExtractLinks(text)
+  const text = await readFile(filePath)
+
+  console.log("\n")
+
+  const linksResult = toExtractLinks(text)
+
+  return linksResult
+
+}
 
 async function readFile(path) {
   const encoding = "utf8"
@@ -13,7 +20,6 @@ async function readFile(path) {
   try {
 
     const result = await fs.promises.readFile(path, encoding)
-    // console.log(chalk.white(result));
 
     return result;
 
@@ -46,3 +52,6 @@ function handleError(error) {
   throw new Error(chalk.red(error.code, "No such file or directory"))
 
 }
+
+
+export default readAndGetLinksOfFile
