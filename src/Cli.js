@@ -1,16 +1,17 @@
 import chalk from 'chalk'
 import fs from 'fs'
 import readAndGetLinksOfFile from "./FileLinksHelper.js"
+import validateLinks from "./HttpValidationHelper.js"
 
 const consoleArguments = process.argv
 
-// This second position of consoleArguments contains our path of text or directory
-const path = consoleArguments[2]
-
-processText(path)
+processText(consoleArguments)
 
 
-async function processText(path) {
+async function processText(consoleArguments) {
+
+  const path = consoleArguments[2]
+  const toValidate = consoleArguments[3]
 
   try {
     fs.statSync(path)
@@ -24,7 +25,7 @@ async function processText(path) {
   if (fs.statSync(path).isFile()) {
 
     const listLinks = await readAndGetLinksOfFile(path)
-    printListLinks(listLinks)
+    printListLinks(toValidate, listLinks)
 
   }
 
@@ -35,7 +36,7 @@ async function processText(path) {
     files.forEach(async (fileName) => {
 
       const listLinks = await readAndGetLinksOfFile(`${path}/${fileName}`)
-      printListLinks(listLinks, fileName)
+      printListLinks(toValidate, listLinks, fileName)
 
     })
 
@@ -43,11 +44,25 @@ async function processText(path) {
 
 }
 
-function printListLinks(links, fileName = '') {
+function printListLinks(validate, links, fileName = '') {
+
+  if (validate) {
+
+    const validatedLinks = validateLinks(links)
+
+    console.log(
+      chalk.yellow("Listing Validated Links: "),
+      chalk.black.bgBlue(fileName),
+      validatedLinks
+    )
+
+    return;
+
+  }
 
   console.log(
-    chalk.yellow("Listing Links: "),
-    chalk.black.bgGreen(fileName),
+    chalk.yellow("Listing Validated Links: "),
+    chalk.black.bgBlue(fileName),
     links
   )
 
