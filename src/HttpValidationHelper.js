@@ -14,7 +14,7 @@ async function toCheckStatusOfLinks(urlList) {
       try {
 
         const response = await fetch(url)
-        return response.status
+        return `${response.status} - ${response.statusText}`
 
       } catch (error) {
         return handleError(error)
