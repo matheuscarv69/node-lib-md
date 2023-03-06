@@ -44,11 +44,11 @@ async function processText(consoleArguments) {
 
 }
 
-function printListLinks(validate, links, fileName = '') {
+async function printListLinks(validate, links, fileName = '') {
 
   if (validate) {
 
-    const validatedLinks = validateLinks(links)
+    const validatedLinks = await validateLinks(links)
 
     console.log(
       chalk.yellow("Listing Validated Links: "),
@@ -62,7 +62,7 @@ function printListLinks(validate, links, fileName = '') {
 
   console.log(
     chalk.yellow("Listing Validated Links: "),
-    chalk.black.bgBlue(fileName),
+    chalk.black.bgGreen(fileName),
     links
   )
 
