@@ -1,3 +1,4 @@
+import chalk from "chalk"
 
 function toExtractLinks(linkList) {
 
@@ -10,8 +11,14 @@ async function toCheckStatusOfLinks(urlList) {
   const statusUrlArray = await Promise.all(
     urlList.map(async (url) => {
 
-      const response = await fetch(url)
-      return response.status
+      try {
+
+        const response = await fetch(url)
+        return response.status
+
+      } catch (error) {
+        return handleError(error)
+      }
 
     })
   )
@@ -19,6 +26,17 @@ async function toCheckStatusOfLinks(urlList) {
   return statusUrlArray
 
 }
+
+function handleError(error) {
+
+  if (error.cause.code === 'ENOTFOUND') {
+    return 'Link not found'
+  }
+
+  return 'Ocurred something error'
+
+}
+
 
 export default async function validateLinks(linkList) {
 
